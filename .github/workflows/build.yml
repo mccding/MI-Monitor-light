@@ -1,0 +1,27 @@
+name: Build PlatformIO Firmware
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python for PlatformIO
+        uses: actions/setup-python@v5
+
+      - name: Install PlatformIO Core
+        run: pip install -U platformio
+
+      - name: Build the project
+        run: pio run
+
+      - name: Upload firmware artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: mi-monitor-light-firmware-pio
+          # 注意: 路径取决于 platformio.ini 中的配置, 请根据实际情况调整
+          path: .pio/build/esp32dev/firmware.bin
